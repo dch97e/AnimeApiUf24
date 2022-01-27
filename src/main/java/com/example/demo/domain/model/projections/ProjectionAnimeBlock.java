@@ -11,17 +11,4 @@ public interface ProjectionAnimeBlock {
     UUID getAnimeid();
     String getName();
 
-//    String getType();
-//    int getYear();
-//    String getImage();
-//    String getDescription();
-
-
-//    @JsonIgnoreProperties("animes")
-//    Set<ProjectionAuthor> getAuthors();
-//    @JsonIgnoreProperties("animes")
-//    Set<ProjectionGenre> getGenres();
-
-
-
 }

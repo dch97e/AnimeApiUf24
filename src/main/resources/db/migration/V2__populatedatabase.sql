@@ -7,8 +7,6 @@ INSERT INTO genre(label,image) VALUES
         ('Genre One', 'image1'),
         ('Genre Two','image2');
 
-
-        -- afegim dades de prova
 INSERT INTO author(name, image) VALUES
         ('Author1', 'author1.jpg'),
         ('Author2', 'author2.jpg');
@@ -31,7 +29,6 @@ INSERT INTO favorite VALUES
 INSERT INTO block_anime VALUES
  ((SELECT userid FROM usser WHERE username = 'user1'),(SELECT animeid FROM anime WHERE name = 'Anime Two')),
  ((SELECT userid FROM usser WHERE username = 'user1'),(SELECT animeid FROM anime WHERE name = 'Anime One'));
-
 
 INSERT INTO follow_user VALUES
  ((SELECT userid FROM usser WHERE username = 'user1'),(SELECT userid FROM usser WHERE username = 'user2'));

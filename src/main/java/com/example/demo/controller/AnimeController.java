@@ -28,23 +28,23 @@ public class AnimeController {
 
     @Autowired
     private AnimeRepository animeRepository;
+
     @Autowired
     private UserRepository userRepository;
+
     @Autowired
     private BlockAnimeRepository blockAnimeRepository;
 
     @GetMapping("/")
     public ResponseEntity<?> findallAnimes(Authentication authentication) {     //usuario autenticado que ha hecho la request
-
         if (authentication == null) {
             return ResponseEntity.ok().body(ListResult.list(animeRepository.findBy(ProjectionAnimeGenres.class)));
         }
         User authenticatedUser = userRepository.findByUsername(authentication.getName());
 
         return ResponseEntity.ok().body(ListResult.list(animeRepository.getAnimesforUser(authenticatedUser.userid, ProjectionAnimeBlock.class)));
-
-
     }
+
 
     @GetMapping("/{id}")
     public ResponseEntity<?> findAnimeByID(Authentication authentication, @PathVariable UUID id) {
@@ -55,6 +55,7 @@ public class AnimeController {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ErrorMessage.message("No s'ha trobat l'anime amd id '" + id + "'"));
     }
 
+
     @PostMapping("/")
     public ResponseEntity<?> createAnime(@RequestBody Anime anime, Authentication authentication) {
         if (animeRepository.findByName(anime.name) != null) {
@@ -62,6 +63,7 @@ public class AnimeController {
         }
         return ResponseEntity.ok().body(animeRepository.save(anime));
     }
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteAnimeById(Authentication authentication, @PathVariable UUID id) {
@@ -73,6 +75,7 @@ public class AnimeController {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ErrorMessage.message("No s'ha trobat l'anime amb id '" + id + "'"));
     }
 
+
     @GetMapping("/block")
     public ResponseEntity<?> findBlock(Authentication authentication) {     //usuario autenticado que ha hecho la request
         if (authentication != null) {
@@ -82,14 +85,13 @@ public class AnimeController {
             }
         }
         return ResponseEntity.ok().body(ErrorMessage.message("No tens animes bloquejats"));
-
     }
+
+
    @PostMapping ("/block")
     public ResponseEntity<?> blockAnime(@RequestBody RequestBlockAnime requestBlockAnime, Authentication authentication){
-
        if (authentication != null) {
            User authenticatedUser = userRepository.findByUsername(authentication.getName());
-
            if (authenticatedUser != null) {
                BlockAnime blockAnime = new BlockAnime();
                blockAnime.animeid = requestBlockAnime.animeid;
@@ -98,24 +100,22 @@ public class AnimeController {
                return ResponseEntity.ok().body(blockAnime);
            }
        }
-
        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ErrorMessage.message("No autorizado"));
-
    }
+
+
     @DeleteMapping ("/block")
     public ResponseEntity<?> deleteBlockAnime(@RequestBody RequestBlockAnime requestBlockAnime, Authentication authentication){
-
         if (authentication != null) {
             User authenticatedUser = userRepository.findByUsername(authentication.getName());
-
             if (authenticatedUser != null) {
                 BlockAnime blockAnime = blockAnimeRepository.findByAnimeid(requestBlockAnime.animeid);
                 blockAnimeRepository.delete(blockAnime);
                 return ResponseEntity.ok().body(ErrorMessage.message(" S'ha eliminat dels bloquejats l'anime amd id'" + requestBlockAnime.animeid + "'"));
             }
         }
-
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ErrorMessage.message("No autorizado"));
-
     }
+
+
 }

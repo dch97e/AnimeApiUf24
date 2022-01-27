@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.UUID;
 
 public interface AnimeRepository extends JpaRepository<Anime, UUID> {
-
     Anime findByName(String name);
     ProjectionAnimeGenres findByAnimeid(UUID id);
     <T> List<T> findBy(Class<T> type);

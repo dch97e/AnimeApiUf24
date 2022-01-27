@@ -8,8 +8,7 @@ import java.util.UUID;
 
 public interface FollowUserRepository extends JpaRepository<UserFollow, UUID> {
     <T> List<T> findBy(Class<T> type);
-
-   UserFollow findByFollower (UUID userid);
+    UserFollow findByFollower (UUID userid);
 
 
 }

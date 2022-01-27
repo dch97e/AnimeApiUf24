@@ -22,10 +22,12 @@ public class AuthorController {
     @Autowired
     private AuthorRepository authorRepository;
 
+
     @GetMapping("/")
     public ResponseEntity<?> findAllAuthors(Authentication authentication) {
         return ResponseEntity.ok().body(ListResult.list(authorRepository.findBy(ProjectionAuthor.class)));
     }
+
 
    @GetMapping("/{id}")
     public ResponseEntity<?> findAnimeByID(Authentication authentication, @PathVariable UUID id) {
@@ -35,23 +37,6 @@ public class AuthorController {
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ErrorMessage.message("No s'ha trobat l'anime amd id '" + id + "'"));
     }
-/*
-    @PostMapping("/")
-    public ResponseEntity<?> createAnime(@RequestBody Anime anime, Authentication authentication) {
-        if (authorRepository.findByName(anime.name) != null) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(ErrorMessage.message("Ja existeix un anime amb el nom '" + anime.name + "'"));
-        }
-        return ResponseEntity.ok().body(authorRepository.save(anime));
-    }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteAnimeById(Authentication authentication, @PathVariable UUID id) {
-        Author animeFound = authorRepository.findById(id).orElse(null);
-        if (animeFound != null) {
-            authorRepository.delete(animeFound);
-            return ResponseEntity.ok().body(ErrorMessage.message("S'ha eliminat l'anime amb id '" + id + "'"));
-        }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ErrorMessage.message("No s'ha trobat l'anime amb id '" + id + "'"));
-    }*/
 
 }

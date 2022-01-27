@@ -33,16 +33,19 @@ public class UserController {
 
     @Autowired
     private FavoriteRepository favoriteRepository;
+
     @Autowired
     private AnimeRepository animeRepository;
+
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
+
     @Autowired
     private FollowUserRepository followUserRepository;
 
+
     @PostMapping("/register")
     public String register(@RequestBody UserRegisterRequest userRegisterRequest) {
-
         if (userRepository.findByUsername(userRegisterRequest.username) == null) {
             User user = new User();
             user.username = userRegisterRequest.username;
@@ -55,32 +58,28 @@ public class UserController {
     }
 
     //Obté tots els usuaris
-
     @GetMapping("/")
     public ResponseEntity<?> getALl(){
         return ResponseEntity.ok().body(ListResult.list(userRepository.findBy(ProjectionUser.class)));
     }
 
+
     @GetMapping("/favorites")
     public ResponseEntity<?> getUser(Authentication authentication){
         if (authentication != null) {
             User authenticatedUser = userRepository.findByUsername(authentication.getName());
-
             if (authenticatedUser != null) {
                 return ResponseEntity.ok().body(userRepository.findByUsername(authentication.getName(), ProjectionFavorites.class));
             }
         }
-
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ErrorMessage.message("No autorizado"));
     }
 
+
     @PostMapping("/favorites")
     public ResponseEntity<?> addFavorite(@RequestBody RequestFavorite requestFavorite, Authentication authentication) {
-
-
         if (authentication != null) {
             User authenticatedUser = userRepository.findByUsername(authentication.getName());
-
             if (authenticatedUser != null) {
                     Favorite favorite = new Favorite();
                     favorite.animeid = requestFavorite.animeid;
@@ -89,12 +88,10 @@ public class UserController {
                     return ResponseEntity.ok().body(favorite);
             }
         }
-
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ErrorMessage.message("No autorizado"));
-
-        //return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ErrorMessage.message("Not authorized"));
-
     }
+
+
     @DeleteMapping("/favorites")
     public ResponseEntity<?> delFavorite(@RequestBody RequestFavorite requestFavorite, Authentication authentication) {
         if (authentication != null) {
@@ -105,14 +102,10 @@ public class UserController {
                     return ResponseEntity.ok().body(ErrorMessage.message(" S'ha eliminat dels favorits l'anime amd id'" + requestFavorite.animeid + "'"));
             }
         }
-
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ErrorMessage.message("No autorizado"));
     }
 
-
-
     //Afegeix un usuari
-
     @PostMapping("/")
     public ResponseEntity<?> createUser(@RequestBody User user) {
         if (userRepository.findByUsername(user.username) != null) {
@@ -123,7 +116,6 @@ public class UserController {
     }
 
     //Elimina un usuari pel seu ID
-
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteUserById(@PathVariable UUID id) {
         User user = userRepository.findById(id).orElse(null);
@@ -136,40 +128,39 @@ public class UserController {
     }
 
     // Elimina tots els usuaris
-
     @DeleteMapping("/")
     public ResponseEntity<?> deleteAll() {
         userRepository.deleteAll();
         return ResponseEntity.status(HttpStatus.OK).body(ErrorMessage.message("S'han eliminat TOTS"));
     }
+
+
     @GetMapping("/follow")
     public ResponseEntity<?> getFollow(Authentication authentication){
         if (authentication != null) {
             User authenticatedUser = userRepository.findByUsername(authentication.getName());
-
             if (authenticatedUser != null) {
                 return ResponseEntity.ok().body(userRepository.findByUsername(authentication.getName(), ProjectionFollow.class));
             }
         }
-
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ErrorMessage.message("No autorizado"));
     }
+
+
     @GetMapping("/followby")
     public ResponseEntity<?> getFollowBy(Authentication authentication){
         if (authentication != null) {
             User authenticatedUser = userRepository.findByUsername(authentication.getName());
-
             if (authenticatedUser != null) {
                 return ResponseEntity.ok().body(userRepository.findByUsername(authentication.getName(), ProjectionFollowBy.class));
             }
         }
-
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ErrorMessage.message("No autorizado"));
     }
+
+
     @PostMapping("/follow")
     public ResponseEntity<?> addFollow(@RequestBody RequestFollow requestFollow, Authentication authentication) {
-
-
         if (authentication != null) {
             User authenticatedUser = userRepository.findByUsername(authentication.getName());
 
@@ -181,11 +172,10 @@ public class UserController {
                 return ResponseEntity.ok().body(follow);
             }
         }
-
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ErrorMessage.message("No autorizado"));
-
-
     }
+
+
     @DeleteMapping("/follow")
     public ResponseEntity<?> unfollow(@RequestBody RequestFollow requestFollow, Authentication authentication) {
         if (authentication != null) {
@@ -196,9 +186,9 @@ public class UserController {
                 return ResponseEntity.ok().body(ErrorMessage.message(" S'ha eliminat dels follow l'user amd id'" + requestFollow.follower + "'"));
             }
         }
-
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ErrorMessage.message("No autorizado"));
     }
+
 
 
 }

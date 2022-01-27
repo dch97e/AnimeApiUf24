@@ -33,7 +33,6 @@ public class User {
     @ManyToMany
     private Set<User> follow;
 
-
     @ManyToMany(mappedBy = "follow")
     private Set<User> followBy;
 

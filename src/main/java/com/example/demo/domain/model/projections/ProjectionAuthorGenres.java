@@ -11,6 +11,7 @@ public interface ProjectionAuthorGenres {
     String getName();
     String getImage();
 
+
     @JsonIgnoreProperties("authors")
     Set<ProjectionAnimeGenres> getAnimes();
 }
