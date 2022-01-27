@@ -14,6 +14,6 @@ public interface AnimeRepository extends JpaRepository<Anime, UUID> {
     ProjectionAnimeGenres findByAnimeid(UUID id);
     <T> List<T> findBy(Class<T> type);
 
-    @Query("SELECT a.animeid as animeid, a.name as name, a.image as image FROM Anime a WHERE a.animeid NOT IN (SELECT b.animeid FROM BlockAnime b)")
+    @Query("SELECT a.animeid as animeid, a.name as name, a.image as image FROM Anime a WHERE a.animeid NOT IN (SELECT b.animeid FROM BlockAnime b WHERE b.userid = ?1)")
     <T> List<T> getAnimesforUser(UUID userid, Class<T> clazz);
 }
