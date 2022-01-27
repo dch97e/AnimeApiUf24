@@ -66,3 +66,8 @@ CREATE TABLE block_anime(
      userid uuid REFERENCES usser(userid) ON DELETE CASCADE,
      animeid uuid REFERENCES anime(animeid) ON DELETE CASCADE,
      PRIMARY KEY (userid, animeid));
+
+CREATE TABLE follow_user(
+    followuser uuid REFERENCES usser(userid) ON DELETE CASCADE,
+    follower uuid REFERENCES usser(userid) ON DELETE CASCADE,
+    PRIMARY KEY(followuser,follower));

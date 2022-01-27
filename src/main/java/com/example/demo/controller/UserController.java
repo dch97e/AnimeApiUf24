@@ -1,16 +1,17 @@
 package com.example.demo.controller;
 
-import com.example.demo.domain.dto.ErrorMessage;
-import com.example.demo.domain.dto.ListResult;
-import com.example.demo.domain.dto.RequestFavorite;
-import com.example.demo.domain.dto.UserRegisterRequest;
+import com.example.demo.domain.dto.*;
 
 import com.example.demo.domain.model.Favorite;
 import com.example.demo.domain.model.User;
+import com.example.demo.domain.model.UserFollow;
 import com.example.demo.domain.model.projections.ProjectionFavorites;
+import com.example.demo.domain.model.projections.ProjectionFollow;
+import com.example.demo.domain.model.projections.ProjectionFollowBy;
 import com.example.demo.domain.model.projections.ProjectionUser;
 import com.example.demo.repository.AnimeRepository;
 import com.example.demo.repository.FavoriteRepository;
+import com.example.demo.repository.FollowUserRepository;
 import com.example.demo.repository.UserRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +37,8 @@ public class UserController {
     private AnimeRepository animeRepository;
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
+    @Autowired
+    private FollowUserRepository followUserRepository;
 
     @PostMapping("/register")
     public String register(@RequestBody UserRegisterRequest userRegisterRequest) {
@@ -138,6 +141,63 @@ public class UserController {
     public ResponseEntity<?> deleteAll() {
         userRepository.deleteAll();
         return ResponseEntity.status(HttpStatus.OK).body(ErrorMessage.message("S'han eliminat TOTS"));
+    }
+    @GetMapping("/follow")
+    public ResponseEntity<?> getFollow(Authentication authentication){
+        if (authentication != null) {
+            User authenticatedUser = userRepository.findByUsername(authentication.getName());
+
+            if (authenticatedUser != null) {
+                return ResponseEntity.ok().body(userRepository.findByUsername(authentication.getName(), ProjectionFollow.class));
+            }
+        }
+
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ErrorMessage.message("No autorizado"));
+    }
+    @GetMapping("/followby")
+    public ResponseEntity<?> getFollowBy(Authentication authentication){
+        if (authentication != null) {
+            User authenticatedUser = userRepository.findByUsername(authentication.getName());
+
+            if (authenticatedUser != null) {
+                return ResponseEntity.ok().body(userRepository.findByUsername(authentication.getName(), ProjectionFollowBy.class));
+            }
+        }
+
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ErrorMessage.message("No autorizado"));
+    }
+    @PostMapping("/follow")
+    public ResponseEntity<?> addFollow(@RequestBody RequestFollow requestFollow, Authentication authentication) {
+
+
+        if (authentication != null) {
+            User authenticatedUser = userRepository.findByUsername(authentication.getName());
+
+            if (authenticatedUser != null) {
+                UserFollow follow = new UserFollow();
+                follow.follower= requestFollow.follower;
+                follow.followuser = authenticatedUser.userid;
+                followUserRepository.save(follow);
+                return ResponseEntity.ok().body(follow);
+            }
+        }
+
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ErrorMessage.message("No autorizado"));
+
+
+    }
+    @DeleteMapping("/follow")
+    public ResponseEntity<?> unfollow(@RequestBody RequestFollow requestFollow, Authentication authentication) {
+        if (authentication != null) {
+            User authenticatedUser = userRepository.findByUsername(authentication.getName());
+            if (authenticatedUser != null) {
+                UserFollow userFollowr = followUserRepository.findByFollower(requestFollow.follower);
+                followUserRepository.delete(userFollowr);
+                return ResponseEntity.ok().body(ErrorMessage.message(" S'ha eliminat dels follow l'user amd id'" + requestFollow.follower + "'"));
+            }
+        }
+
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ErrorMessage.message("No autorizado"));
     }
 
 

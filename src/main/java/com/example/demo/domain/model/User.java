@@ -26,4 +26,16 @@ public class User {
     @ManyToMany(mappedBy = "blockBy")
     @JsonIgnoreProperties("blockBy")
     public Set<Anime> blocks;
+
+    @JoinTable(name = "follow_user", joinColumns = {
+            @JoinColumn(name = "followuser", referencedColumnName = "userid", nullable = false)}, inverseJoinColumns = {
+            @JoinColumn(name = "follower", referencedColumnName = "userid", nullable = false)})
+    @ManyToMany
+    private Set<User> follow;
+
+
+    @ManyToMany(mappedBy = "follow")
+    private Set<User> followBy;
+
+
 }

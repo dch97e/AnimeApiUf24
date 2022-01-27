@@ -14,7 +14,8 @@ INSERT INTO author(name, image) VALUES
         ('Author2', 'author2.jpg');
 
 INSERT INTO usser (username, password) VALUES
-        ('user1', crypt('pass', gen_salt('bf')));
+        ('user1', crypt('pass', gen_salt('bf'))),
+        ('user2', crypt('pass2', gen_salt('bf')));
 
 INSERT INTO anime_author VALUES
     ((SELECT animeid FROM anime WHERE name = 'Anime One'),(SELECT authorid FROM author WHERE name = 'Author1')),
@@ -30,3 +31,7 @@ INSERT INTO favorite VALUES
 INSERT INTO block_anime VALUES
  ((SELECT userid FROM usser WHERE username = 'user1'),(SELECT animeid FROM anime WHERE name = 'Anime Two')),
  ((SELECT userid FROM usser WHERE username = 'user1'),(SELECT animeid FROM anime WHERE name = 'Anime One'));
+
+
+INSERT INTO follow_user VALUES
+ ((SELECT userid FROM usser WHERE username = 'user1'),(SELECT userid FROM usser WHERE username = 'user2'));
