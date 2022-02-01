@@ -20,4 +20,6 @@ public interface ProjectionAnimeGenres {
     Set<ProjectionAuthor> getAuthors();
     @JsonIgnoreProperties("animes")
     Set<ProjectionGenre> getGenres();
+    @JsonIgnoreProperties("animeWithImages")
+    Set<ProjectionImages> getImages();
 }

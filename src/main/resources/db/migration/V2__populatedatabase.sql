@@ -32,3 +32,10 @@ INSERT INTO block_anime VALUES
 
 INSERT INTO follow_user VALUES
  ((SELECT userid FROM usser WHERE username = 'user1'),(SELECT userid FROM usser WHERE username = 'user2'));
+
+INSERT INTO images (animeid,imageurl) VALUES
+((SELECT animeid FROM anime WHERE name = 'Anime One'), 'anime1_image1.jpg'),
+((SELECT animeid FROM anime WHERE name = 'Anime One'), 'anime1_image2.jpg'),
+((SELECT animeid FROM anime WHERE name = 'Anime Two'), 'anime2_image1.jpg'),
+((SELECT animeid FROM anime WHERE name = 'Anime Two'), 'anime2_image2.jpg');
+

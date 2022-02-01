@@ -40,6 +40,9 @@ public class Anime {
     @JsonIgnoreProperties("animes")
     public Set<User> blockBy;
 
+    @OneToMany (cascade = CascadeType.ALL, mappedBy = "animeWithImages")
+    public List<Image> images;
+
 
 }
 

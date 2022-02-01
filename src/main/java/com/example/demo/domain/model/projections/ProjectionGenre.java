@@ -15,4 +15,5 @@ public interface ProjectionGenre {
 
     @JsonIgnoreProperties("genres")
     Set<ProjectionAnime2> getAnimes();
+
 }

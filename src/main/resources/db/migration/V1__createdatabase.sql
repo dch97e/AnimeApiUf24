@@ -57,3 +57,11 @@ CREATE TABLE follow_user(
     followuser uuid REFERENCES usser(userid) ON DELETE CASCADE,
     follower uuid REFERENCES usser(userid) ON DELETE CASCADE,
     PRIMARY KEY(followuser,follower));
+
+CREATE TABLE images(
+    animeid uuid REFERENCES anime(animeid) ON DELETE CASCADE,
+    imageid uuid NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
+    imageurl text);
+
+
+
