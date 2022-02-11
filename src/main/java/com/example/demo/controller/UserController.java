@@ -99,7 +99,7 @@ public class UserController {
             if (authenticatedUser != null) {
                     Favorite favorite = favoriteRepository.findByAnimeid(requestFavorite.animeid);
                     favoriteRepository.delete(favorite);
-                    return ResponseEntity.ok().body(ErrorMessage.message(" S'ha eliminat dels favorits l'anime amd id'" + requestFavorite.animeid + "'"));
+                    return ResponseEntity.ok().body(ErrorMessage.message(" S'ha eliminat dels favorits l'anime amb id'" + requestFavorite.animeid + "'"));
             }
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ErrorMessage.message("No autorizado"));
@@ -121,9 +121,9 @@ public class UserController {
         User user = userRepository.findById(id).orElse(null);
         if (user != null) {
             userRepository.delete(user);
-            return ResponseEntity.ok().body(ErrorMessage.message("S'ha eliminat l'usuari amd id '" + id + "'"));
+            return ResponseEntity.ok().body(ErrorMessage.message("S'ha eliminat l'usuari amb id '" + id + "'"));
         } else {
-            return ResponseEntity.status(HttpStatus.OK).body(ErrorMessage.message("No s'ha trobat l'user amd id '" + id + "'"));
+            return ResponseEntity.status(HttpStatus.OK).body(ErrorMessage.message("No s'ha trobat l'user amb id '" + id + "'"));
         }
     }
 
@@ -163,11 +163,15 @@ public class UserController {
     public ResponseEntity<?> addFollow(@RequestBody RequestFollow requestFollow, Authentication authentication) {
         if (authentication != null) {
             User authenticatedUser = userRepository.findByUsername(authentication.getName());
+            if (authenticatedUser !=  null) {
                 UserFollow follow = new UserFollow();
-                follow.follower= requestFollow.follower;
+                follow.follower = requestFollow.follower;
                 follow.followuser = authenticatedUser.userid;
                 followUserRepository.save(follow);
                 return ResponseEntity.ok().body(follow);
+            }else{
+                return ResponseEntity.status(HttpStatus.OK).body(ErrorMessage.message("No s'ha trobat l'user amb id '" + requestFollow.follower + "'"));
+            }
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ErrorMessage.message("No autorizado"));
     }
@@ -180,7 +184,7 @@ public class UserController {
             if (authenticatedUser != null) {
                 UserFollow userFollowr = followUserRepository.findByFollower(requestFollow.follower);
                 followUserRepository.delete(userFollowr);
-                return ResponseEntity.ok().body(ErrorMessage.message(" S'ha eliminat dels follow l'user amd id'" + requestFollow.follower + "'"));
+                return ResponseEntity.ok().body(ErrorMessage.message(" S'ha eliminat dels follow l'user amb id'" + requestFollow.follower + "'"));
             }
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ErrorMessage.message("No autorizado"));
