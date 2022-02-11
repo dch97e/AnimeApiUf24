@@ -163,14 +163,11 @@ public class UserController {
     public ResponseEntity<?> addFollow(@RequestBody RequestFollow requestFollow, Authentication authentication) {
         if (authentication != null) {
             User authenticatedUser = userRepository.findByUsername(authentication.getName());
-
-            if (authenticatedUser != null) {
                 UserFollow follow = new UserFollow();
                 follow.follower= requestFollow.follower;
                 follow.followuser = authenticatedUser.userid;
                 followUserRepository.save(follow);
                 return ResponseEntity.ok().body(follow);
-            }
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ErrorMessage.message("No autorizado"));
     }
